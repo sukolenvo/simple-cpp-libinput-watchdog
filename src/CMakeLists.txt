@@ -1,5 +1,6 @@
 add_library(simple-cpp-in-dog-lib simple_cpp/in_dog/unix_socket.cpp
-        simple_cpp/in_dog/fd.cpp)
+        simple_cpp/in_dog/fd.cpp
+        simple_cpp/in_dog/event_fd.cpp)
 target_link_libraries(simple-cpp-in-dog-lib PRIVATE simple-cpp-in-dog-options)
 target_include_directories(simple-cpp-in-dog-lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 

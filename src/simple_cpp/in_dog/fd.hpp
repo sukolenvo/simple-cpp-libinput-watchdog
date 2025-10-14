@@ -13,6 +13,14 @@ class Fd {
     int get() const;
     size_t read(std::vector<char>& buff);
     bool writeBuf(std::span<const char> buffer) const;
+    template <typename  T>
+    bool writeVal(const T& val) const {
+      const char* begin = reinterpret_cast<const char*>(&val);
+      const char* end = begin + sizeof(val);
+      return writeBuf({begin, end});
+    }
+    bool sendFd(const Fd& fd) const;
+
 
     Fd(const Fd&) = delete;
     Fd& operator=(const Fd&) = delete;

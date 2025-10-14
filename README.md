@@ -2,9 +2,8 @@
 
 **in-dog** is util for detecting linux machine inactivity (no keyboard/mouse events).
 
-Device event are detected using libinput.
-
-Clients can connect to in-dog using unix-soket.
+Device event are detected using libinput. Signals of activity are send using eventfd (at most 1 per sec).
+EventFd exchange is done via unix socket `/run/in-dog.socket`.
 
 ## Build
 
@@ -23,5 +22,6 @@ ctest --test-dir build
 
 ## References
 
+* eventFd: https://man7.org/linux/man-pages/man2/eventfd.2.html
 * libinput docs: https://wayland.freedesktop.org/libinput/doc/latest/
 * Unix socket docs (with example at the end): https://man7.org/linux/man-pages/man7/unix.7.html
