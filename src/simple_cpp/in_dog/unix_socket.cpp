@@ -1,4 +1,5 @@
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <sys/un.h>
 #include <unistd.h>
 #include <stdexcept>
@@ -23,7 +24,9 @@ UnixSocket UnixServerSocket::accept() {
     }
     std::ranges::copy(address_, addr.sun_path);
     unlink(address_.c_str());
+    auto mask_before = umask(0);
     auto ret = bind(fd.get(), reinterpret_cast<const struct sockaddr*>(&addr), sizeof(addr));
+    umask(mask_before);
     if (ret != 0) {
       throw std::runtime_error("Cannot bind: error " + std::to_string(errno));
     }
@@ -117,5 +120,5 @@ Fd UnixSocket::receiveFd() const {
       return *data;
     }
   }
-  throw std::runtime_error("Didn't received valid control message");
+  throw std::runtime_error("Failed to receive valid control message");
 }

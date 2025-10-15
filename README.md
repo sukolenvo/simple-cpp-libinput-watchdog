@@ -5,6 +5,23 @@
 Device event are detected using libinput. Signals of activity are send using eventfd (at most 1 per sec).
 EventFd exchange is done via unix socket `/run/in-dog.socket`.
 
+## Example usage
+
+```c++
+int main() {
+  int fd = openUnixSocket();
+  int event_fd = readEventFd(fd);
+
+  uint64_t buf;
+  while (read(event_fd, &buf, sizeof(buf))) {
+    std::println("Received event at {}", std::chrono::system_clock::now());
+  }
+}
+
+```
+
+See full example: [client.cpp](./src/simple_cpp/in_dog/client.cpp)
+
 ## Build
 
 Requires C++23.
