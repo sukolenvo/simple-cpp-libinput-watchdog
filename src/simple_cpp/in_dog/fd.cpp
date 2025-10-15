@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <unistd.h>
+#include <sys/poll.h>
 
 bool Fd::isValid() const {
   return fd_ != -1;
@@ -36,6 +37,15 @@ bool Fd::writeBuf(std::span<const char> buffer) const {
     pos += done;
   }
   return true;
+}
+
+bool Fd::poll() const {
+  pollfd poll_fd{
+    .fd = fd_,
+    .events = POLLIN
+  };
+  int poll = ::poll(&poll_fd, 1, -1);
+  return poll > -1;
 }
 
 Fd::Fd(Fd&& other) : fd_(other.fd_) {

@@ -9,6 +9,11 @@ EventFd exchange is done via unix socket `/run/in-dog.socket`.
 
 Requires C++23.
 
+Dependencies:
+```bash
+sudo apt intall libudev-dev libinput-dev
+```
+
 ```bash
 cmake -B build
 # or specific compiler:

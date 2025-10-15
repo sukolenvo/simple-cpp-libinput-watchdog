@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.22.1)
 
 project(simple-cpp-in-dog)
 
+find_package(Libinput REQUIRED)
+pkg_check_modules(LIBUDEV libudev REQUIRED)
+
 add_library(simple-cpp-in-dog-options INTERFACE)
 target_compile_features(simple-cpp-in-dog-options INTERFACE cxx_std_23)
 

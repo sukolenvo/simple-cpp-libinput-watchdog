@@ -20,7 +20,7 @@ class Fd {
       return writeBuf({begin, end});
     }
     bool sendFd(const Fd& fd) const;
-
+    bool poll() const;
 
     Fd(const Fd&) = delete;
     Fd& operator=(const Fd&) = delete;

@@ -12,7 +12,7 @@ EventFd EventFd::open() {
   return EventFd{std::move(fd)};
 }
 
-bool EventFd::signal() {
+bool EventFd::signal() const {
   return fd_.writeVal<uint64_t>(1);
 }
 
