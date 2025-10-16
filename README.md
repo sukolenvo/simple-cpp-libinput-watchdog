@@ -27,11 +27,13 @@ See full example: [client.cpp](./src/simple_cpp/in_dog/client.cpp)
 
 ## Build
 
+Github action workflow include latest setup steps.
+
 Requires C++23.
 
 Dependencies:
 ```bash
-sudo apt intall libudev-dev libinput-dev
+sudo apt install libudev-dev libinput-dev
 ```
 
 ```bash
