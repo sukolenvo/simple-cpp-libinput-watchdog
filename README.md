@@ -17,7 +17,10 @@ int main() {
     std::println("Received event at {}", std::chrono::system_clock::now());
   }
 }
-
+// Received event at 2025-10-15 13:44:14.725692097
+// Received event at 2025-10-15 13:44:15.351273864
+// Received event at 2025-10-15 13:44:18.393661309
+// Received event at 2025-10-15 13:44:22.710662992
 ```
 
 See full example: [client.cpp](./src/simple_cpp/in_dog/client.cpp)

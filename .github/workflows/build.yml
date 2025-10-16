@@ -1,0 +1,17 @@
+name: Build and Test
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v5
+      - name: configure cmake
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
+      - name: build
+        run: cmake --build ${{github.workspace}}/build --config Release
+      - name: test
+        working-directory: ${{github.workspace}}
+        run: ctest -C Release

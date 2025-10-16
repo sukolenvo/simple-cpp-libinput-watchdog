@@ -9,7 +9,6 @@
 void forwardEvents(Input* input, EventFd* event_fd) {
   Fd& input_fd = input->getInputFd();
   while (input_fd.poll()) {
-    std::print("Received event!\n");
     if (!event_fd->signal()) {
       std::print("Failed to signal");
     }
