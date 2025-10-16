@@ -10,10 +10,12 @@
 
 class App {
   public:
+    App();
     void run(std::string_view socket_path);
 
     ~App();
   private:
+    EventFd shutdown_;
     std::unique_ptr<EventFd> event_fd_;
     std::unique_ptr<UnixServerSocket> unix_server_socket_;
     std::unique_ptr<Input> input_;

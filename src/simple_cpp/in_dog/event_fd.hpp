@@ -7,7 +7,7 @@ class EventFd {
   public:
     static EventFd open();
     explicit EventFd(Fd&& fd);
-    bool signal() const;
+    bool signal();
     bool wait();
 
     Fd& getFd();

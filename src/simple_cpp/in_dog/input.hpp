@@ -5,6 +5,7 @@
 #include <memory>
 #include <thread>
 
+#include "event_fd.hpp"
 #include "fd.hpp"
 #include "input.hpp"
 
@@ -22,6 +23,7 @@ class Input {
 
     ~Input();
   private:
+    EventFd shutdown_;
     libinput_interface libinput_interface_;
     std::unique_ptr<udev, decltype(&delete_udev)> udev_;
     std::unique_ptr<libinput, decltype(&delete_libinput)> context_;

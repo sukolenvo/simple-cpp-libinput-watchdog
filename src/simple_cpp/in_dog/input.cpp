@@ -19,9 +19,11 @@ void delete_libinput(libinput* libinput) {
   libinput_unref(libinput);
 }
 
-Input::Input(): libinput_interface_{open_restricted, close_restricted},
-                udev_(nullptr, delete_udev),
-                context_(nullptr, delete_libinput) {
+Input::Input()
+  : shutdown_(EventFd::open()),
+    libinput_interface_{open_restricted, close_restricted},
+    udev_(nullptr, delete_udev),
+    context_(nullptr, delete_libinput) {
 }
 
 Fd& Input::start() {
@@ -38,7 +40,11 @@ Fd& Input::start() {
 
     dispatch_thread_ = std::make_unique<std::thread>(
       [this]() {
-        while (fd_ != nullptr && fd_->poll()) {
+        while (true) {
+          int ready = poll(*fd_, shutdown_.getFd());
+          if (ready == -1 || ready == 1) { // error or shutdown signal
+            return;
+          }
           libinput_dispatch(context_.get());
           libinput_event* event;
           while ((event = libinput_get_event(context_.get())) != nullptr) {
@@ -57,11 +63,12 @@ Fd& Input::getInputFd() {
 }
 
 Input::~Input() {
+  shutdown_.signal();
+  if (dispatch_thread_ != nullptr) {
+    dispatch_thread_->join();
+  }
+  dispatch_thread_.reset();
   fd_.reset();
   context_.reset();
   udev_.reset();
-  if (dispatch_thread_ != nullptr) {
-    // dispatch_thread_->join();
-  }
-  dispatch_thread_.reset();
 }

@@ -31,4 +31,6 @@ class Fd {
     int fd_;
 };
 
+int poll(const Fd& a, const Fd& b);
+
 #endif //SIMPLE_CPP_IN_DOG_FD_HPP

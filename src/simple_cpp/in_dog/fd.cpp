@@ -67,3 +67,21 @@ Fd::~Fd() {
     fd_ = -1;
   }
 }
+
+int poll(const Fd& a, const Fd& b) {
+  std::array<pollfd, 2> pollfds{};
+  pollfds[0].fd = a.get();
+  pollfds[0].events = POLLIN;
+  pollfds[1].fd = b.get();
+  pollfds[1].events = POLLIN;
+  int poll = ::poll(pollfds.data(), pollfds.size(), -1);
+  if (poll == -1) {
+    return -1;
+  }
+  for (auto i = 0; i < pollfds.size(); ++i) {
+    if (pollfds[i].revents == POLLIN) {
+      return i;
+    }
+  }
+  return -1;
+}

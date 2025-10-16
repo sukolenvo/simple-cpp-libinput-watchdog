@@ -1,4 +1,6 @@
-add_executable(simple-cpp-in-dog-tests simple_cpp/in_dog/unx_socket_test.cpp)
+add_executable(simple-cpp-in-dog-tests simple_cpp/in_dog/unx_socket_test.cpp
+        simple_cpp/in_dog/input_test.cpp
+        simple_cpp/in_dog/app_test.cpp)
 target_link_libraries(simple-cpp-in-dog-tests PRIVATE Catch2::Catch2WithMain simple-cpp-in-dog-options simple-cpp-in-dog-lib)
 
 include(Catch)

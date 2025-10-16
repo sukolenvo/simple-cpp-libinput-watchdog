@@ -5,6 +5,7 @@
 #include <string>
 #include <string_view>
 
+#include "event_fd.hpp"
 #include "fd.hpp"
 
 class UnixSocket {
@@ -21,7 +22,7 @@ class UnixSocket {
 class UnixServerSocket {
   public:
     explicit UnixServerSocket(std::string_view address);
-    UnixSocket accept();
+    std::unique_ptr<UnixSocket> accept();
 
     UnixServerSocket(const UnixServerSocket&) = delete;
     UnixServerSocket(UnixServerSocket&& other) noexcept = default;
@@ -30,6 +31,7 @@ class UnixServerSocket {
     ~UnixServerSocket();
 
   private:
+    EventFd shutdown_;
     std::string address_;
     std::unique_ptr<Fd> unix_socket_;
 };

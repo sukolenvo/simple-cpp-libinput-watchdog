@@ -1,3 +1,4 @@
+#include <print>
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/un.h>
@@ -7,10 +8,10 @@
 
 #include "unix_socket.hpp"
 
-UnixServerSocket::UnixServerSocket(std::string_view address) : address_(address) {
+UnixServerSocket::UnixServerSocket(std::string_view address) : shutdown_(EventFd::open()), address_(address) {
 }
 
-UnixSocket UnixServerSocket::accept() {
+std::unique_ptr<UnixSocket> UnixServerSocket::accept() {
   if (unix_socket_ == nullptr) {
     Fd fd = socket(AF_UNIX, SOCK_STREAM, 0);
     if (!fd.isValid()) {
@@ -38,15 +39,21 @@ UnixSocket UnixServerSocket::accept() {
     unix_socket_ = std::make_unique<Fd>(std::move(fd));
   }
 
+  int ready = poll(shutdown_.getFd(), *unix_socket_);
+  if (ready == -1 || ready == 0) {
+    return {};
+  }
   Fd fd = ::accept(unix_socket_->get(), nullptr, nullptr);
 
   if (!fd.isValid()) {
-    throw std::runtime_error("Failed to accept: error " + std::to_string(errno));
+    std::println(stderr, "Failed to accept connection: error {}", errno);
+    return {};
   }
-  return UnixSocket{std::move(fd)};
+  return std::make_unique<UnixSocket>(std::move(fd));
 }
 
 UnixServerSocket::~UnixServerSocket() {
+  shutdown_.signal();
   if (unix_socket_ != nullptr) {
     unlink(address_.c_str());
   }
