@@ -47,6 +47,33 @@ cmake --build build -- -j 24
 ctest --test-dir build
 ```
 
+## Install
+
+To add it to autostart:
+
+Create `/etc/systemd/system-in-dog.service` (update ExecStart to full path if necessary):
+```
+[Unit]
+Description=in dog service
+Documentation=https://github.com/sukolenvo/simple-cpp-libinput-watchdog
+Wants=modprobe@uinput.service
+After=modprobe@uinput.service
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=simple-cpp-in-dog-main
+```
+
+Then execute:
+```bash
+sudo systemctl start in-dog
+sudo systemctl status in-dog
+sudo systemctl enable in-dog
+```
+
 ## References
 
 * eventFd: https://man7.org/linux/man-pages/man2/eventfd.2.html
