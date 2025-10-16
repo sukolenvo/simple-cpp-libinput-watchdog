@@ -9,11 +9,11 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v5
       - name: install dependencies
-        run: sudo apt update && sudo apt-get install -y libudev-dev libinput-dev
+        run: sudo apt update && sudo apt-get install -y --no-install-recommends libudev-dev libinput-dev
       - name: configure cmake
         run: cmake -B ${{github.workspace}}/build -DCMAKE_C_COMPILER=gcc-14 -DCMAKE_CXX_COMPILER=g++-14 -DCMAKE_BUILD_TYPE=Release
       - name: build
-        run: cmake --build ${{github.workspace}}/build --config Release
+        run: cmake --build ${{github.workspace}}/build --config Release -- -j 8
       - name: test
-        working-directory: ${{github.workspace}}
+        working-directory: ${{github.workspace}}/build
         run: ctest -C Release
