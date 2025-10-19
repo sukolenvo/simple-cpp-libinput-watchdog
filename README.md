@@ -51,7 +51,7 @@ ctest --test-dir build
 
 To add it to autostart:
 
-Create `/etc/systemd/system-in-dog.service` (update ExecStart to full path if necessary):
+Create `/etc/systemd/system/in-dog.service` (update ExecStart to full path if necessary):
 ```
 [Unit]
 Description=in dog service
